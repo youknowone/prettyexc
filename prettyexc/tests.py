@@ -1,8 +1,7 @@
 
-from prettyexc import PrettyException
-from prettyexc.environment import Environment
+from prettyexc import PrettyException, Environment
 from prettyexc.environment import default_python_environment, human_environment
-
+from prettyexc import patch
 
 def passert(test, *prints):
     try:
@@ -23,10 +22,10 @@ def test_default():
     passert(str([e]) == '[<prettyexc.core.PrettyException>]', str([e]))
 
     e = PrettyException(200)
-    passert(str(e) == 'prettyexc.core.PrettyException(200): 200', str(e))
+    passert(str(e) == 'prettyexc.core.PrettyException: 200', str(e))
     passert(str([e]) == '[<prettyexc.core.PrettyException(200)>]', str([e]))
     e = PrettyException("test")
-    passert(str(e) == 'prettyexc.core.PrettyException("test"): test', str(e))
+    passert(str(e) == 'prettyexc.core.PrettyException: test', str(e))
     passert(str([e]) == '[<prettyexc.core.PrettyException("test")>]', str([e]))
     e = PrettyException(code=10)
     assert(str(e) == 'prettyexc.core.PrettyException(code=10)')
@@ -39,7 +38,7 @@ def test_pythonlike():
     e = PrettyException()
     assert(str(e) == 'prettyexc.core.PrettyException')
     e = PrettyException('message')
-    assert(str(e) == 'prettyexc.core.PrettyException("message"): message')
+    assert(str(e) == 'prettyexc.core.PrettyException: message')
     e = PrettyException('many', 'args')
     passert(str(e) == 'prettyexc.core.PrettyException("many","args")', str(e))
 
@@ -88,6 +87,22 @@ def test_env():
     e = T4Exception(1, 2, 3, 'arg4')
     passert(str(e) == '__main__.T4Exception', str(e))
 
+def test_patch():
+    class AnException(Exception):
+        def __init__(self, *args):
+            super(AnException, self).__init__(*args)
+            self.number = 10
+
+        def value(self):
+            return self.number + 2
+    
+    patch(AnException, PrettyException)
+    e = AnException("message", user_id=1)
+    passert(str(e) == '__main__.AnException("message",user_id=1)', str(e))
+    passert(e.value() == 12)
+
+    e = PrettyException()
+    passert(str(e) == 'prettyexc.core.PrettyException', str(e))
 
 if __name__ == '__main__':
     symbols = globals().keys()

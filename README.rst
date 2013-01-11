@@ -13,6 +13,8 @@ Example
 
     >>> from prettyexc import PrettyException
 
+Put and get your arguments always
+
     >>> class SimpleException(PrettyException):
     ...     pass
     ... 
@@ -21,6 +23,8 @@ Example
     SimpleException("any","plain","args",code=200,description="OK")
     >>> print [e, e]
     [<SimpleException("any","plain","args",code=200,description="OK")>, <SimpleException("any","plain","args",code=200,description="OK")>]
+
+Set default message
 
     >>> class MessageException(PrettyException):
     ...     message = u'You should select a user'
@@ -31,6 +35,8 @@ Example
     >>> print [e, e]
     [<MessageException(user_id=10)>, <MessageException(user_id=10)>]
 
+Set message formatter
+
     >>> class FormatException(PrettyException):
     ...     message_format = u'User {user_id} has no permission.'
     ... 
@@ -39,3 +45,14 @@ Example
     FormatException(user_id=10): User 10 has no permission.
     >>> print e.message
     User 10 has no permission.
+
+Patch existing exceptions
+
+    >>> from prettyexc import patch
+    >>> from prettyexc import PrettyException, patch
+    >>> class AnException(Exception): pass
+    ... 
+    >>> patch(AnException, PrettyException)
+    >>> print AnException(status=404)
+    __main__.AnException(status=404)
+

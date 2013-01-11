@@ -40,7 +40,9 @@ class PrettyException(Exception):
 
     def _args(self, env):
         """Override to modify arguments expression."""
-        if env.SHOW_ARGS == False:
+        if env.SHOW_ARGS is False:
+            return ''
+        if env.SHOW_ARGS is None and len(self.args) == 1 and not self.kwargs:
             return ''
         argss = [_arg_to_unicode(arg, env) for arg in self.args]
         argss += [_kwarg_to_unicode(kw, arg, env) for kw, arg in self.kwargs.items()]
@@ -94,7 +96,7 @@ class PrettyException(Exception):
         """Default message builder from message_format."""
         fmt = self.message_format
         if not fmt:
-            if len(self.args) == 1:
+            if len(self.args) == 1 and not self.kwargs:
                 return unicode(self.args[0]) # Python default Exception behavior
             return ''
         return fmt.format(*self.args, **self.kwargs)

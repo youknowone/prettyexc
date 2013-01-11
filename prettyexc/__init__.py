@@ -10,8 +10,9 @@
 """
 
 import pkg_resources
+VERSION = pkg_resources.resource_string('prettyexc', 'version.txt').strip()
+
 from .environment import Environment
 from .core import PrettyException
-
-VERSION = pkg_resources.resource_string('prettyexc', 'version.txt').strip()
+from .patch import patch
 
