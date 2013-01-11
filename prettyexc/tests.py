@@ -16,24 +16,33 @@ def passert(test, *prints):
 def test_default():
     e = PrettyException()
     assert(e)
-    passert(str(e) == 'prettyexc.PrettyException', str(e))
+    passert(str(e) == 'prettyexc.core.PrettyException', str(e))
     assert(e._show_module() is True)
-    assert(e._type(e.unicode_environment) == 'prettyexc.PrettyException')
+    assert(e._type(e.unicode_environment) == 'prettyexc.core.PrettyException')
     assert(not e._message(e.unicode_environment))
-    passert(str([e]) == '[<prettyexc.PrettyException>]', str([e]))
+    passert(str([e]) == '[<prettyexc.core.PrettyException>]', str([e]))
 
     e = PrettyException(200)
-    assert(str(e) == 'prettyexc.PrettyException(200)')
-    passert(str([e]) == '[<prettyexc.PrettyException(200)>]', str([e]))
+    passert(str(e) == 'prettyexc.core.PrettyException(200): 200', str(e))
+    passert(str([e]) == '[<prettyexc.core.PrettyException(200)>]', str([e]))
     e = PrettyException("test")
-    assert(str(e) == 'prettyexc.PrettyException("test")')
-    passert(str([e]) == '[<prettyexc.PrettyException("test")>]', str([e]))
+    passert(str(e) == 'prettyexc.core.PrettyException("test"): test', str(e))
+    passert(str([e]) == '[<prettyexc.core.PrettyException("test")>]', str([e]))
     e = PrettyException(code=10)
-    assert(str(e) == 'prettyexc.PrettyException(code=10)')
-    passert(str([e]) == '[<prettyexc.PrettyException(code=10)>]', str([e]))
+    assert(str(e) == 'prettyexc.core.PrettyException(code=10)')
+    passert(str([e]) == '[<prettyexc.core.PrettyException(code=10)>]', str([e]))
     e = PrettyException(mode='test')
-    assert(str(e) == 'prettyexc.PrettyException(mode="test")')
-    passert(str([e]) == '[<prettyexc.PrettyException(mode="test")>]', str([e]))
+    assert(str(e) == 'prettyexc.core.PrettyException(mode="test")')
+    passert(str([e]) == '[<prettyexc.core.PrettyException(mode="test")>]', str([e]))
+
+def test_pythonlike():
+    e = PrettyException()
+    assert(str(e) == 'prettyexc.core.PrettyException')
+    e = PrettyException('message')
+    assert(str(e) == 'prettyexc.core.PrettyException("message"): message')
+    e = PrettyException('many', 'args')
+    passert(str(e) == 'prettyexc.core.PrettyException("many","args")', str(e))
+
 
 def test_pythondefault():
     class PythonException(PrettyException):
