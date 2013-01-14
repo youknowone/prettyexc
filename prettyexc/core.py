@@ -28,7 +28,10 @@ class PrettyException(Exception):
         if self._args_kwargs_map:
             for i, key in enumerate(self._args_kwargs_map):
                 if not key in kwargs:
-                    kwargs[key] = args[i]
+                    try:
+                        kwargs[key] = args[i]
+                    except IndexError:
+                        break # stop is no args anymore
             args = args[len(self._args_kwargs_map):]
         if self._req_args_count > len(args):
             raise InvalidArgumentCount(len(args), self._req_args_count)
