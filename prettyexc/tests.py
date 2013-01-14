@@ -1,7 +1,8 @@
 
 from prettyexc import PrettyException, Environment
-from prettyexc.environment import default_python_environment, human_environment
 from prettyexc import patch
+from prettyexc.environment import default_python_environment, human_environment
+from prettyexc.exceptions import InvalidArgumentCount, InvalidArgumentKeyword
 
 def passert(test, *prints):
     try:
@@ -108,6 +109,40 @@ def test_patch():
 
     e = PrettyException()
     passert(str(e) == '', str(e))
+
+def test_transition():
+    class TransitionException(PrettyException):
+        _args_kwargs_map = ['code', 'description']
+
+    e = TransitionException(200, 'OK')
+    passert(str(e) == 'code=200,description="OK"', str(e))
+
+def test_constraint():
+    class MinArgsException(PrettyException):
+        _req_args_count = 2
+
+    try:
+        e = MinArgsException(0)
+    except InvalidArgumentCount, e:
+        assert e.expected == 2
+        assert e.given == 1
+
+    e = MinArgsException(0, 1)
+    e = MinArgsException(0, 1, 2)
+
+    class MinKwargsException(PrettyException):
+        _req_kwargs_keys = ['code', 'desc']
+
+    try:
+        e = MinKwargsException(code=200)
+    except InvalidArgumentKeyword, e:
+        assert e.expected == 'desc'
+
+    e = MinKwargsException(code=200, desc='blah')
+    e = MinKwargsException(200, 'blah')
+    assert e.code == 200
+    assert e.desc == 'blah'
+
 
 if __name__ == '__main__':
     symbols = globals().keys()

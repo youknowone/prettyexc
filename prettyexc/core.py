@@ -16,8 +16,25 @@ class PrettyException(Exception):
     message_format = None
     unicode_environment = default_unicode_environment
     repr_environment = default_repr_environment
+    
+    _req_args_count = 0
+    _req_kwargs_keys = []
+    
+    @property
+    def _args_kwargs_map(self):
+        return self._req_kwargs_keys
 
     def __init__(self, *args, **kwargs):
+        if self._args_kwargs_map:
+            for i, key in enumerate(self._args_kwargs_map):
+                if not key in kwargs:
+                    kwargs[key] = args[i]
+            args = args[len(self._args_kwargs_map):]
+        if self._req_args_count > len(args):
+            raise InvalidArgumentCount(len(args), self._req_args_count)
+        for key in self._req_kwargs_keys:
+            if not key in kwargs:
+                raise InvalidArgumentKeyword(key)
         self.args = args
         self.kwargs = kwargs
    
@@ -123,4 +140,20 @@ class PrettyException(Exception):
                 return self._args(args_environment)
             return ''
         return fmt.format(*self.args, **self.kwargs)
+
+class InvalidArgumentCount(PrettyException):
+    message_format = u'At least {expected} arguments are expected but {given} arguments are given.'
+
+    def __init__(self, given, expected):
+        # override to avoid recursion
+        self.args = []
+        self.kwargs = {'given': given, 'expected': expected}
+
+class InvalidArgumentKeyword(PrettyException):
+    message_format = u'{expected} keyword are expected but not exists.'
+
+    def __init__(self, expected):
+        # override to avoid recursion
+        self.args = []
+        self.kwargs = {'expected': expected}
 
