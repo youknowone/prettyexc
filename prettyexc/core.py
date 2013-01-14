@@ -96,6 +96,18 @@ class PrettyException(Exception):
     def __str__(self):
         return self.__unicode__().encode(self.unicode_environment.DEFAULT_CHARSET)
 
+    def __getattr__(self, key):
+        if key and key[0] != '_':
+            try:
+                return self.kwargs[key]
+            except:
+                pass
+        sup = super(PrettyException, self)
+        try:
+            return sup.__getattr__()
+        except:
+            return sup.__getattribute__()
+
     @property
     def message(self):
         """Default message builder from message_format."""
