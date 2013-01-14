@@ -22,7 +22,7 @@ def get_readme():
 setup(
     name='prettyexc',
     version=get_version(),
-    description='Easy pretty-look exception interface.',
+    description='Make any exception human readable in easy way.',
     long_description=get_readme(),
     author='Jeong YunWon',
     author_email='jeong+prettyexc@youknowone.org',
