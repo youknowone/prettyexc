@@ -9,6 +9,7 @@ class Environment(object):
     None means automatic selection by value.
     """
     SHOW_CHEVRONS = False # None == False
+    SHOW_TYPE = True # None == False
     SHOW_MODULE = False # None: False if module starts with '__' else True
     SHOW_ARGS = True # None: False if no args else True
     SHOW_MESSAGE = False # None: False if no message else True
@@ -23,8 +24,10 @@ class Environment(object):
             setattr(self, kw, arg)
 
 default_python_environment = Environment()
-default_unicode_environment = Environment(SHOW_MODULE=None, SHOW_ARGS=None, SHOW_MESSAGE=None)
+default_unicode_environment = Environment(SHOW_TYPE=False, SHOW_ARGS=None, SHOW_MESSAGE=None)
 default_repr_environment = Environment(SHOW_CHEVRONS=True, SHOW_MODULE=None, SHOW_ARGS=True)
 
+typed_environment = Environment(SHOW_MODULE=True, SHOW_ARGS=None, SHOW_MESSAGE=None)
 human_environment = Environment(SHOW_ARGS=False, SHOW_MESSAGE=True)
-
+args_environment = Environment(SHOW_ARGS=True)
+all_environment = Environment(SHOW_CHEVRON=True, SHOW_TYPE=True, SHOW_MODULE=True, SHOW_ARGS=True, SHOW_MESSAGE=True)

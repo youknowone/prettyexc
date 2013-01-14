@@ -33,4 +33,7 @@ setup(
     package_data={
         'prettyexc': ['version.txt']
     },
+    install_requires=[
+        'distribute',
+    ],
 )

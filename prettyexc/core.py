@@ -1,5 +1,5 @@
 
-from .environment import default_unicode_environment, default_repr_environment
+from .environment import default_unicode_environment, default_repr_environment, args_environment
 
 def _arg_to_unicode(arg, env):
     if isinstance(arg, unicode):
@@ -27,6 +27,8 @@ class PrettyException(Exception):
 
     def _type(self, env):
         """Override to modify type expresson."""
+        if not env.SHOW_TYPE:
+           return ''
         s = self.__class__.__name__
         mod = self.__class__.__module__
         show_module = env.SHOW_MODULE if env.SHOW_MODULE is not None else self._show_module()
@@ -68,15 +70,18 @@ class PrettyException(Exception):
         ss = []
         if env.SHOW_CHEVRONS:
             ss.append(u'<')
-        ss.append(self._type(env))
-        args = self._args(env)
-        if args:
-            ss.append(u'(')
-            ss.append(args)
-            ss.append(u')')
+        typ = self._type(env)
+        if typ:
+            ss.append(typ)
+            args = self._args(env)
+            if args:
+                ss.append(u'(')
+                ss.append(args)
+                ss.append(u')')
         msg = self._message(env)
-        if msg:
+        if typ and msg:
             ss.append(u': ')
+        if msg:
             ss.append(msg)
         if env.SHOW_CHEVRONS:
             ss.append(u'>')
@@ -96,8 +101,14 @@ class PrettyException(Exception):
         """Default message builder from message_format."""
         fmt = self.message_format
         if not fmt:
+            # Python default Exception behavior
             if len(self.args) == 1 and not self.kwargs:
-                return unicode(self.args[0]) # Python default Exception behavior
+                return unicode(self.args[0])
+            argss = list(self.args)
+            for kw, arg in self.kwargs.items():
+                argss.append('='.join((kw, unicode(arg))))
+            if argss:
+                return self._args(args_environment)
             return ''
         return fmt.format(*self.args, **self.kwargs)
 

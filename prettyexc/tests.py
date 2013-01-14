@@ -15,33 +15,36 @@ def passert(test, *prints):
 def test_default():
     e = PrettyException()
     assert(e)
-    passert(str(e) == 'prettyexc.core.PrettyException', str(e))
+    passert(str(e) == '', str(e))
+    passert(repr(e) == '<prettyexc.core.PrettyException>', repr(e))
     assert(e._show_module() is True)
-    assert(e._type(e.unicode_environment) == 'prettyexc.core.PrettyException')
+    passert(e._type(e.repr_environment) == 'prettyexc.core.PrettyException', e._type(e.repr_environment))
     assert(not e._message(e.unicode_environment))
     passert(str([e]) == '[<prettyexc.core.PrettyException>]', str([e]))
 
     e = PrettyException(200)
-    passert(str(e) == 'prettyexc.core.PrettyException: 200', str(e))
+    passert(str(e) == '200', str(e))
     passert(str([e]) == '[<prettyexc.core.PrettyException(200)>]', str([e]))
     e = PrettyException("test")
-    passert(str(e) == 'prettyexc.core.PrettyException: test', str(e))
+    passert(str(e) == 'test', str(e))
     passert(str([e]) == '[<prettyexc.core.PrettyException("test")>]', str([e]))
     e = PrettyException(code=10)
-    assert(str(e) == 'prettyexc.core.PrettyException(code=10)')
+    passert(str(e) == "code=10", str(e))
     passert(str([e]) == '[<prettyexc.core.PrettyException(code=10)>]', str([e]))
     e = PrettyException(mode='test')
-    assert(str(e) == 'prettyexc.core.PrettyException(mode="test")')
+    passert(str(e) == 'mode="test"')
     passert(str([e]) == '[<prettyexc.core.PrettyException(mode="test")>]', str([e]))
 
 def test_pythonlike():
+    p = Exception()
     e = PrettyException()
-    assert(str(e) == 'prettyexc.core.PrettyException')
+    assert(str(e) == str(p))
+    p = Exception('message')
     e = PrettyException('message')
-    assert(str(e) == 'prettyexc.core.PrettyException: message')
+    assert(str(e) == str(p))
+    p = Exception('many', 'args')
     e = PrettyException('many', 'args')
-    passert(str(e) == 'prettyexc.core.PrettyException("many","args")', str(e))
-
+    #passert(str(e) == str(p), str(e), str(p))
 
 def test_pythondefault():
     class PythonException(PrettyException):
@@ -60,8 +63,8 @@ def test_format():
     e = T1Exception(code=200, description='OK')
     assert(e)
     passert(e.message == 'Raise 200 with OK.', e.message)
-    passert(str(e) == 'T1Exception(code=200,description="OK"): Raise 200 with OK.', str(e))
-    passert(e.__repr__() == '<T1Exception(code=200,description="OK")>', e.__repr__())
+    passert(str(e) == 'Raise 200 with OK.', str(e))
+    passert(repr(e) == '<T1Exception(code=200,description="OK")>', repr(e))
 
 def test_message():
     class T2Exception(PrettyException):
@@ -69,7 +72,8 @@ def test_message():
 
     e = T2Exception()
     assert(e)
-    assert(str(e) == 'T2Exception: You should see this message')
+    assert(str(e) == 'You should see this message')
+    assert(repr(e) == '<T2Exception>')
 
 def test_human():
     class T3Exception(PrettyException):
@@ -98,11 +102,12 @@ def test_patch():
     
     patch(AnException, PrettyException)
     e = AnException("message", user_id=1)
-    passert(str(e) == '__main__.AnException("message",user_id=1)', str(e))
+    passert(str(e) == '"message",user_id=1', str(e))
+    passert(repr(e) == '<__main__.AnException("message",user_id=1)>', repr(e))
     passert(e.value() == 12)
 
     e = PrettyException()
-    passert(str(e) == 'prettyexc.core.PrettyException', str(e))
+    passert(str(e) == '', str(e))
 
 if __name__ == '__main__':
     symbols = globals().keys()
