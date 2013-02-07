@@ -124,9 +124,9 @@ class PrettyException(Exception):
                 pass
         sup = super(PrettyException, self)
         try:
-            return sup.__getattr__()
+            return sup.__getattr__(key)
         except:
-            return sup.__getattribute__()
+            return sup.__getattribute__(key)
 
     @property
     def message(self):
