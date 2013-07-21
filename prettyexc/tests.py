@@ -4,37 +4,28 @@ from prettyexc import patch
 from prettyexc.environment import default_python_environment, human_environment
 from prettyexc.exceptions import InvalidArgumentCount, InvalidArgumentKeyword
 
-def passert(test, *prints):
-    try:
-        assert(test)
-    except AssertionError, e:
-        for i, p in enumerate(prints):
-            print i, ':', p
-        print 'test:', test
-        raise e
-
 def test_default():
     e = PrettyException()
     assert(e)
-    passert(str(e) == '', str(e))
-    passert(repr(e) == '<prettyexc.core.PrettyException>', repr(e))
+    assert(str(e) == '')
+    assert(repr(e) == '<prettyexc.core.PrettyException>')
     assert(e._show_module() is True)
-    passert(e._type(e.repr_environment) == 'prettyexc.core.PrettyException', e._type(e.repr_environment))
+    assert(e._type(e.repr_environment) == 'prettyexc.core.PrettyException')
     assert(not e._message(e.unicode_environment))
-    passert(str([e]) == '[<prettyexc.core.PrettyException>]', str([e]))
+    assert(str([e]) == '[<prettyexc.core.PrettyException>]')
 
     e = PrettyException(200)
-    passert(str(e) == '200', str(e))
-    passert(str([e]) == '[<prettyexc.core.PrettyException(200)>]', str([e]))
+    assert(str(e) == '200')
+    assert(str([e]) == '[<prettyexc.core.PrettyException(200)>]')
     e = PrettyException("test")
-    passert(str(e) == 'test', str(e))
-    passert(str([e]) == '[<prettyexc.core.PrettyException("test")>]', str([e]))
+    assert(str(e) == 'test')
+    assert(str([e]) == '[<prettyexc.core.PrettyException("test")>]')
     e = PrettyException(code=10)
-    passert(str(e) == "code=10", str(e))
-    passert(str([e]) == '[<prettyexc.core.PrettyException(code=10)>]', str([e]))
+    assert(str(e) == "code=10")
+    assert(str([e]) == '[<prettyexc.core.PrettyException(code=10)>]')
     e = PrettyException(mode='test')
-    passert(str(e) == 'mode="test"')
-    passert(str([e]) == '[<prettyexc.core.PrettyException(mode="test")>]', str([e]))
+    assert(str(e) == 'mode="test"')
+    assert(str([e]) == '[<prettyexc.core.PrettyException(mode="test")>]')
 
 def test_pythonlike():
     p = Exception()
@@ -45,7 +36,7 @@ def test_pythonlike():
     assert(str(e) == str(p))
     p = Exception('many', 'args')
     e = PrettyException('many', 'args')
-    #passert(str(e) == str(p), str(e), str(p))
+    #assert(str(e) == str(p), str(e), str(p))
 
 def test_pythondefault():
     class PythonException(PrettyException):
@@ -55,17 +46,17 @@ def test_pythondefault():
     e = PythonException()
     assert(e)
     assert(str(e) == 'PythonException')
-    passert(str([e]) == '[PythonException]', str([e]))
-    
+    assert(str([e]) == '[PythonException]')
+
 def test_format():
     class T1Exception(PrettyException):
         message_format = u'Raise {code} with {description}.'
 
     e = T1Exception(code=200, description='OK')
     assert(e)
-    passert(e.message == 'Raise 200 with OK.', e.message)
-    passert(str(e) == 'Raise 200 with OK.', str(e))
-    passert(repr(e) == '<T1Exception(code=200,description="OK")>', repr(e))
+    assert(e.message == 'Raise 200 with OK.')
+    assert(str(e) == 'Raise 200 with OK.')
+    assert(repr(e) == '<T1Exception(code=200,description="OK")>')
 
 def test_message():
     class T2Exception(PrettyException):
@@ -82,15 +73,15 @@ def test_human():
         message = u'Shows message.'
 
     e = T3Exception()
-    passert(str(e) == 'T3Exception: Shows message.', str(e))
+    assert(str(e) == 'T3Exception: Shows message.')
 
 def test_env():
     custom_env = Environment(SHOW_MODULE=True, SHOW_ARGS=False)
     class T4Exception(PrettyException):
         unicode_environment = custom_env
-    
+
     e = T4Exception(1, 2, 3, 'arg4')
-    passert(str(e) == '__main__.T4Exception', str(e))
+    assert(str(e) == '__main__.T4Exception')
 
 def test_patch():
     class AnException(Exception):
@@ -100,22 +91,22 @@ def test_patch():
 
         def value(self):
             return self.number + 2
-    
+
     patch(AnException, PrettyException)
     e = AnException("message", user_id=1)
-    passert(str(e) == '"message",user_id=1', str(e))
-    passert(repr(e) == '<__main__.AnException("message",user_id=1)>', repr(e))
-    passert(e.value() == 12)
+    assert(str(e) == '"message",user_id=1')
+    assert(repr(e) == '<__main__.AnException("message",user_id=1)>')
+    assert(e.value() == 12)
 
     e = PrettyException()
-    passert(str(e) == '', str(e))
+    assert(str(e) == '')
 
 def test_transition():
     class TransitionException(PrettyException):
         _args_kwargs_map = ['code', 'description']
 
     e = TransitionException(200, 'OK')
-    passert(str(e) == 'code=200,description="OK"', str(e))
+    assert(str(e) == 'code=200,description="OK"')
 
 def test_constraint():
     class MinArgsException(PrettyException):
@@ -123,7 +114,7 @@ def test_constraint():
 
     try:
         e = MinArgsException(0)
-    except InvalidArgumentCount, e:
+    except InvalidArgumentCount as e:
         assert e.expected == 2
         assert e.given == 1
 
@@ -135,7 +126,7 @@ def test_constraint():
 
     try:
         e = MinKwargsException(code=200)
-    except InvalidArgumentKeyword, e:
+    except InvalidArgumentKeyword as e:
         assert e.expected == 'desc'
 
     e = MinKwargsException(code=200, desc='blah')
@@ -145,7 +136,7 @@ def test_constraint():
 
 
 if __name__ == '__main__':
-    symbols = globals().keys()
+    symbols = list(globals().keys())
     for k in symbols:
         if k.startswith('test_'):
             globals()[k]()

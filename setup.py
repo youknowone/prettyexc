@@ -34,6 +34,6 @@ setup(
         'prettyexc': ['version.txt']
     },
     install_requires=[
-        'distribute',
+        'distribute', 'six',
     ],
 )

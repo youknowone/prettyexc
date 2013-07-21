@@ -8,7 +8,7 @@ def patch(Exc, Template=PrettyException):
         self.__original_init__(*args)
         self._delegate = Template(*args, **kwargs)
         self._delegate._type = lambda env: '' if not env.SHOW_TYPE else '.'.join((self.__class__.__module__, self.__class__.__name__)) if env.SHOW_MODULE is None or env.SHOW_MODULE else self.__class__.__name__
-    
+
     def __repr__(self):
         return self._delegate.__repr__()
 
