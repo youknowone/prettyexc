@@ -135,6 +135,15 @@ def test_constraint():
     assert e.desc == 'blah'
 
 
+def test_get_with_index():
+    class TestException(PrettyException):
+        pass
+
+    e = TestException(1, 2)
+    assert e[0] == 1
+    assert e[1] == 2
+
+
 if __name__ == '__main__':
     symbols = list(globals().keys())
     for k in symbols:

@@ -133,6 +133,9 @@ class PrettyException(Exception):
         except:
             return sup.__getattribute__(key)
 
+    def __getitem__(self, index):
+        return self.args[index]
+
     @property
     def message(self):
         """Default message builder from message_format."""
