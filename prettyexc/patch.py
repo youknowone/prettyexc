@@ -1,6 +1,6 @@
 
-import types
 from .core import PrettyException
+
 
 def patch(Exc, Template=PrettyException):
     # functions
@@ -32,9 +32,7 @@ def patch(Exc, Template=PrettyException):
     props = {'args': args, 'kwargs': kwargs, 'message': message}
 
     Exc.__original_init__ = Exc.__init__
-    instance = Exc()
     for name, func in funcs.items():
         setattr(Exc, name, func)
     for name, func in props.items():
         setattr(Exc, name, property(func))
-

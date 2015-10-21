@@ -1,8 +1,7 @@
 from __future__ import with_statement
-
 try:
     from setuptools import setup
-except ImportError:
+except Exception:
     from distutils.core import setup
 
 
@@ -22,7 +21,7 @@ def get_readme():
 setup(
     name='prettyexc',
     version=get_version(),
-    description='Make any exception human readable in easy way.',
+    description='Toolkit for human-friendly exception interface.',
     long_description=get_readme(),
     author='Jeong YunWon',
     author_email='jeong+prettyexc@youknowone.org',
@@ -34,7 +33,10 @@ setup(
         'prettyexc': ['version.txt']
     },
     install_requires=[
-        'six',
+        'six>=1.7',
+    ],
+    tests_require=[
+        'mock', 'flake8', 'tox',
     ],
     classifiers=[
         'Intended Audience :: Developers',
@@ -46,5 +48,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
-     ],
+    ],
 )

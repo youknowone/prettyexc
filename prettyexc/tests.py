@@ -4,6 +4,7 @@ from prettyexc import patch
 from prettyexc.environment import default_python_environment, human_environment
 from prettyexc.exceptions import InvalidArgumentCount, InvalidArgumentKeyword
 
+
 def test_default():
     e = PrettyException()
     assert(e)
@@ -27,6 +28,7 @@ def test_default():
     assert(str(e) == 'mode="test"')
     assert(str([e]) == '[<prettyexc.core.PrettyException(mode="test")>]')
 
+
 def test_pythonlike():
     p = Exception()
     e = PrettyException()
@@ -36,7 +38,8 @@ def test_pythonlike():
     assert(str(e) == str(p))
     p = Exception('many', 'args')
     e = PrettyException('many', 'args')
-    #assert(str(e) == str(p), str(e), str(p))
+    # assert(str(e) == str(p), str(e), str(p))
+
 
 def test_pythondefault():
     class PythonException(PrettyException):
@@ -48,6 +51,7 @@ def test_pythondefault():
     assert(str(e) == 'PythonException')
     assert(str([e]) == '[PythonException]')
 
+
 def test_format():
     class T1Exception(PrettyException):
         message_format = u'Raise {code} with {description}.'
@@ -58,6 +62,7 @@ def test_format():
     assert(str(e) == 'Raise 200 with OK.')
     assert(repr(e) == '<T1Exception(code=200,description="OK")>')
 
+
 def test_message():
     class T2Exception(PrettyException):
         message = u'You should see this message'
@@ -67,6 +72,7 @@ def test_message():
     assert(str(e) == 'You should see this message')
     assert(repr(e) == '<T2Exception>')
 
+
 def test_human():
     class T3Exception(PrettyException):
         unicode_environment = human_environment
@@ -75,13 +81,16 @@ def test_human():
     e = T3Exception()
     assert(str(e) == 'T3Exception: Shows message.')
 
+
 def test_env():
     custom_env = Environment(SHOW_MODULE=True, SHOW_ARGS=False)
+
     class T4Exception(PrettyException):
         unicode_environment = custom_env
 
     e = T4Exception(1, 2, 3, 'arg4')
     assert(str(e) == '__main__.T4Exception')
+
 
 def test_patch():
     class AnException(Exception):
@@ -101,12 +110,14 @@ def test_patch():
     e = PrettyException()
     assert(str(e) == '')
 
+
 def test_transition():
     class TransitionException(PrettyException):
         _args_kwargs_map = ['code', 'description']
 
     e = TransitionException(200, 'OK')
     assert(str(e) == 'code=200,description="OK"')
+
 
 def test_constraint():
     class MinArgsException(PrettyException):

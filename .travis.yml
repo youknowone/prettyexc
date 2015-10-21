@@ -4,11 +4,17 @@ python:
   - "2.7"
   - "3.3"
   - "3.4"
+  - "3.5"
   - "pypy"
   - "nightly"
 # command to install dependencies
 install:
-  - "pip install mock ."
+  - "pip install flake8 mock ."
 # command to run tests
-script: python prettyexc/tests.py
+script:
+  - "flake8 --ignore=E501  ."
+  - "python prettyexc/tests.py"
+matrix:
+  allow_failures:
+    - python: nightly
 sudo: false

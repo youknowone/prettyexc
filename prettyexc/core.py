@@ -1,6 +1,8 @@
 
 from six import PY3, text_type
-from .environment import default_unicode_environment, default_repr_environment, args_environment
+from .environment import (
+    default_unicode_environment, default_repr_environment, args_environment)
+
 
 def _arg_to_unicode(arg, env):
     if not PY3 and isinstance(arg, str):
@@ -10,11 +12,13 @@ def _arg_to_unicode(arg, env):
         targ = u''.join((env.STR_QUOTE, arg, env.STR_QUOTE))
     return targ
 
+
 def _kwarg_to_unicode(kw, arg, env):
     return u''.join((text_type(kw), u'=', _arg_to_unicode(arg, env)))
 
 
 class PrettyException(Exception):
+
     message_format = None
     unicode_environment = default_unicode_environment
     repr_environment = default_repr_environment
@@ -29,16 +33,16 @@ class PrettyException(Exception):
     def __init__(self, *args, **kwargs):
         if self._args_kwargs_map:
             for i, key in enumerate(self._args_kwargs_map):
-                if not key in kwargs:
+                if key not in kwargs:
                     try:
                         kwargs[key] = args[i]
                     except IndexError:
-                        break # stop is no args anymore
+                        break  # stop is no args anymore
             args = args[len(self._args_kwargs_map):]
         if self._req_args_count > len(args):
             raise InvalidArgumentCount(len(args), self._req_args_count)
         for key in self._req_kwargs_keys:
-            if not key in kwargs:
+            if key not in kwargs:
                 raise InvalidArgumentKeyword(key)
         self.args = args
         self.kwargs = kwargs
@@ -50,7 +54,7 @@ class PrettyException(Exception):
     def _type(self, env):
         """Override to modify type expresson."""
         if not env.SHOW_TYPE:
-           return ''
+            return ''
         s = self.__class__.__name__
         mod = self.__class__.__module__
         show_module = env.SHOW_MODULE if env.SHOW_MODULE is not None else self._show_module()
@@ -80,7 +84,7 @@ class PrettyException(Exception):
 
     def _message(self, env):
         """Override to modify message expression."""
-        if env.SHOW_MESSAGE == False:
+        if env.SHOW_MESSAGE is False:
             return ''
         msg = self.message
         if not self._show_message(msg):
@@ -152,6 +156,7 @@ class PrettyException(Exception):
             return ''
         return fmt.format(*self.args, **self.kwargs)
 
+
 class InvalidArgumentCount(PrettyException):
     message_format = u'At least {expected} arguments are expected but {given} arguments are given.'
 
@@ -160,6 +165,7 @@ class InvalidArgumentCount(PrettyException):
         self.args = []
         self.kwargs = {'given': given, 'expected': expected}
 
+
 class InvalidArgumentKeyword(PrettyException):
     message_format = u'{expected} keyword are expected but not exists.'
 
@@ -167,4 +173,3 @@ class InvalidArgumentKeyword(PrettyException):
         # override to avoid recursion
         self.args = []
         self.kwargs = {'expected': expected}
-
