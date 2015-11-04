@@ -1,6 +1,9 @@
 Pretty-Exception for Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. image:: https://travis-ci.org/youknowone/prettyexc.svg?branch=master
+    :target: https://travis-ci.org/youknowone/prettyexc
+
 prettyexc provides common exception representation to make human-readable exception in easy way.
 
 You can install the package from PyPI
@@ -17,7 +20,7 @@ Prelude::
 Put and get your arguments always::
 	>>> class SimpleException(PrettyException):
 	...     pass
-	... 
+	...
 	>>> e = SimpleException('any', 'plain', 'args', code=200, description='OK')
 	>>> raise e
 	Traceback (most recent call last):
@@ -30,7 +33,7 @@ Put and get your arguments always::
 Set default message::
     >>> class MessageException(PrettyException):
     ...     message = u'You should select a user'
-    ... 
+    ...
     >>> e = MessageException(user_id=10)
     >>> raise e
     Traceback (most recent call last):
@@ -42,7 +45,7 @@ Set default message::
 Set message formatter::
     >>> class FormatException(PrettyException):
     ...     message_format = u'User {user_id} has no permission.'
-    ... 
+    ...
     >>> e = FormatException(user_id=10)
     >>> raise e
     Traceback (most recent call last):
@@ -54,7 +57,7 @@ Set message formatter::
 Patch existing exceptions::
     >>> from prettyexc import patch
     >>> class AnException(Exception): pass
-    ... 
+    ...
     >>> patch(AnException, PrettyException)
     >>> raise AnException(status=404)
     Traceback (most recent call last):
