@@ -138,7 +138,10 @@ class PrettyException(Exception):
             return sup.__getattribute__(key)
 
     def __getitem__(self, index):
-        return self.args[index]
+        try:
+            return self.args[index]
+        except TypeError:
+            return self.kwargs[index]
 
     @property
     def message(self):

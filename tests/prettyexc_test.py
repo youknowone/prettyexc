@@ -60,7 +60,25 @@ def test_format():
     assert(e)
     assert(e.message == 'Raise 200 with OK.')
     assert(str(e) == 'Raise 200 with OK.')
-    assert(repr(e) == '<T1Exception(code=200,description="OK")>')
+    assert(repr(e) == '<{0}.T1Exception(code=200,description="OK")>'.format(__name__))
+
+
+def test_arguments():
+    class ArgsException(PrettyException):
+        pass
+
+    e = ArgsException('Message', code=200, description='OK')
+    assert(e)
+    assert(len(e.args) == 1)
+    assert(e.args[0] == 'Message')
+    assert(e[0] == 'Message')
+    assert(len(e.kwargs) == 2)
+    assert(e.kwargs['code'] == 200)
+    assert(e.kwargs['description'] == 'OK')
+    assert(e['code'] == 200)
+    assert(e['description'] == 'OK')
+    assert(str(e) == '"Message",code=200,description="OK"')
+    assert(repr(e) == '<{0}.ArgsException("Message",code=200,description="OK")>'.format(__name__))
 
 
 def test_message():
@@ -70,7 +88,7 @@ def test_message():
     e = T2Exception()
     assert(e)
     assert(str(e) == 'You should see this message')
-    assert(repr(e) == '<T2Exception>')
+    assert(repr(e) == '<{0}.T2Exception>'.format(__name__))
 
 
 def test_human():
@@ -89,7 +107,7 @@ def test_env():
         unicode_environment = custom_env
 
     e = T4Exception(1, 2, 3, 'arg4')
-    assert(str(e) == '__main__.T4Exception')
+    assert(str(e) == '{0}.T4Exception'.format(__name__))
 
 
 def test_patch():
@@ -104,7 +122,7 @@ def test_patch():
     patch(AnException, PrettyException)
     e = AnException("message", user_id=1)
     assert(str(e) == '"message",user_id=1')
-    assert(repr(e) == '<__main__.AnException("message",user_id=1)>')
+    assert(repr(e) == '<{0}.AnException("message",user_id=1)>'.format(__name__))
     assert(e.value() == 12)
 
     e = PrettyException()

@@ -9,11 +9,11 @@ python:
   - "nightly"
 # command to install dependencies
 install:
-  - "pip install flake8 mock ."
+  - "pip install flake8 mock pytest ."
 # command to run tests
 script:
   - "flake8 --ignore=E501  ."
-  - "python prettyexc/tests.py"
+  - "py.test --verbose tests/"
 matrix:
   allow_failures:
     - python: nightly
