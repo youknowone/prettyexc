@@ -129,12 +129,12 @@ class PrettyException(Exception):
         if key and key[0] != '_':
             try:
                 return self.kwargs[key]
-            except:
+            except KeyError:
                 pass
         sup = super(PrettyException, self)
         try:
             return sup.__getattr__(key)
-        except:
+        except AttributeError:
             return sup.__getattribute__(key)
 
     def __getitem__(self, index):
