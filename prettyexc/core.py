@@ -57,7 +57,8 @@ class PrettyException(Exception):
             return ''
         s = self.__class__.__name__
         mod = self.__class__.__module__
-        show_module = env.SHOW_MODULE if env.SHOW_MODULE is not None else self._show_module()
+        show_module = env.SHOW_MODULE if env.SHOW_MODULE is not None else \
+            self._show_module()
         if show_module:
             s = '.'.join((mod, s))
         return s
@@ -73,7 +74,9 @@ class PrettyException(Exception):
         if env.SHOW_ARGS is None and len(self.args) == 1 and not self.kwargs:
             return ''
         argss = [_arg_to_unicode(arg, env) for arg in self.args]
-        argss += [_kwarg_to_unicode(kw, arg, env) for kw, arg in sorted(self.kwargs.items())]
+        argss += [
+            _kwarg_to_unicode(kw, arg, env) for kw, arg
+            in sorted(self.kwargs.items())]
         if env.SHOW_ARGS is not True and not self._show_args(argss):
             return ''
         return u','.join(argss)
@@ -161,7 +164,8 @@ class PrettyException(Exception):
 
 
 class InvalidArgumentCount(PrettyException):
-    message_format = u'At least {expected} arguments are expected but {given} arguments are given.'
+    message_format = u'At least {expected} arguments are expected ' \
+                     u'but {given} arguments are given.'
 
     def __init__(self, given, expected):
         # override to avoid recursion

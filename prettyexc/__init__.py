@@ -3,7 +3,8 @@
     pretty-exception
     ~~~~~~~~~~~~~~~~
 
-    Common exception ancestor to print pretty exception to use instead of Exception.
+    Common exception ancestor to print pretty exception to use instead of
+    Exception.
 
     :copyright: (c) 2013 Jeong YunWon
     :license: 2-clause BSD.

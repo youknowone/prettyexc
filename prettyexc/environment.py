@@ -27,10 +27,15 @@ class Environment(object):
 
 
 default_python_environment = Environment()
-default_unicode_environment = Environment(SHOW_TYPE=False, SHOW_ARGS=None, SHOW_MESSAGE=None)
-default_repr_environment = Environment(SHOW_CHEVRONS=True, SHOW_MODULE=None, SHOW_ARGS=True)
+default_unicode_environment = Environment(
+    SHOW_TYPE=False, SHOW_ARGS=None, SHOW_MESSAGE=None)
+default_repr_environment = Environment(
+    SHOW_CHEVRONS=True, SHOW_MODULE=None, SHOW_ARGS=True)
 
-typed_environment = Environment(SHOW_MODULE=True, SHOW_ARGS=None, SHOW_MESSAGE=None)
+typed_environment = Environment(
+    SHOW_MODULE=True, SHOW_ARGS=None, SHOW_MESSAGE=None)
 human_environment = Environment(SHOW_ARGS=False, SHOW_MESSAGE=True)
 args_environment = Environment(SHOW_ARGS=True)
-all_environment = Environment(SHOW_CHEVRON=True, SHOW_TYPE=True, SHOW_MODULE=True, SHOW_ARGS=True, SHOW_MESSAGE=True)
+all_environment = Environment(
+    SHOW_CHEVRON=True, SHOW_TYPE=True, SHOW_MODULE=True, SHOW_ARGS=True,
+    SHOW_MESSAGE=True)
