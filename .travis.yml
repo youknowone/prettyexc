@@ -3,12 +3,11 @@ cache: pip
 sudo: false
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
-  - "pypy"
-  - "pypy3"
+  - pypy2.7-5.10.0
+  - pypy3.5-5.10.0
   - "nightly"
 # command to install dependencies
 install:
@@ -16,6 +15,7 @@ install:
   - "pip install -e ."
 # command to run tests
 script:
+  - "flake8 prettyexc"
   - "flake8 --ignore=E501 ."
   - "pytest --cov=prettyexc -vv tests/"
 after_success:
