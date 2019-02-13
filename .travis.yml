@@ -11,7 +11,7 @@ python:
   - "nightly"
 # command to install dependencies
 install:
-  - "pip install flake8 mock 'pytest>=3.2.3' pytest-cov python-coveralls"
+  - "pip install flake8 mock 'pytest>=4.2.0' 'pytest-cov>=2.6.1' python-coveralls"
   - "pip install -e ."
 # command to run tests
 script:
