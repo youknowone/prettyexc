@@ -10,9 +10,13 @@
     :license: 2-clause BSD.
 """
 
-import pkg_resources
-
-VERSION = pkg_resources.resource_string('prettyexc', 'version.txt').strip()  # noqa
+try:
+    import pkg_resources
+except ImportError:
+    # pkg_resource is not available on Google App Engine
+    VERSION = None
+else:
+    VERSION = pkg_resources.resource_string('prettyexc', 'version.txt').strip()  # noqa
 
 from .environment import Environment
 from .core import PrettyException
